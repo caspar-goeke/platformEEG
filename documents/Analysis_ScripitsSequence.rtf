@@ -1,0 +1,178 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1348\cocoasubrtf170
+{\fonttbl\f0\froman\fcharset0 TimesNewRomanPSMT;\f1\fnil\fcharset0 Menlo-Regular;\f2\fnil\fcharset0 MonotypeCorsiva;
+}
+{\colortbl;\red255\green255\blue255;\red49\green49\blue49;\red49\green49\blue49;\red255\green255\blue255;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww25940\viewh14540\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ri-9105\pardirnatural\qc
+
+\f0\b\fs36 \cf0 EEG ANALYSIS - Scripts\'92 sequence
+\b0\fs24 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 \
+1. Transform raw .cnt file in 
+\b .set
+\b0  file as specified in the separate doc \'93convert_cnt_in_set_files.docx\'94. \
+\
+2. Change 
+\b Sampling Rate
+\b0  (256 Hz), 
+\b High Pass Filter
+\b0  (1) and 
+\b triggers\'92 deblanking.
+\b0  
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ \'97>
+\f2 \cf0 \kerning1\expnd0\expndtw0  
+\f1 \cf3 \cb4 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec3 data_preprocess.m 
+\f0\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\tx18153\ri-9137\pardirnatural
+\cf0 3. If necessary, 
+\b remove
+\b0  bad channels or 
+\b channels
+\b0  not used (in our case usually: \'91Cz\'92, \'91Ref\'92, \'91HEOG\'92, \'91CzOtheram\'92). 
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ \'97>
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0  
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+data_preprocess.m\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\tx18153\ri-9137\pardirnatural
+
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 4. Include 
+\b Behavioral
+\b0  data in the EEG structure. 
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ \'97>
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0  
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+includeBehavioral.m 
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 (IMP! First make sure to have the balancing correspondent file in data/individual/SubjectIDNumber_vestibular.mat)\
+\
+5. Run 
+\b ICA
+\b0  for each condition (we\'92ve been using RUNICA). 
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+\'97>
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0  
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ICA.m\
+
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 Plotting components, select components to reject, etc.
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ \'97>
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0  
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ICA.m\
+
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 Remove \'93bad\'94 components by eye and with Components Data Scroll
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ \'97>
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0  
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+removeComponents.m
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0  
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ \
+
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 It is possible to plot the components\'92 activation spectogram with trials sorted by trials\'92 difficulty. 
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+\'97>
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0  
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+calcICAsortedbyRT.m
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0  
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ \
+
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 \
+6. Check all the 
+\b Triggers
+\b0  are in the desired sequence. 
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ \'97>
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0  
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+sanityCheck.m
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 \
+Rename Triggers as desired and remove extra triggers of the belt (run the part correspondent to the desired condition)
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ \'97>
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0  
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+rename_triggers_NEW.m \
+[rename_triggers.m \'97> 
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 old version
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+]
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 \
+It\'92s possible to double check if the number of a certain trigger corresponds actually to the correct number of trials
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ \'97>
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0  
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+checkTriggers.m
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0   \
+\
+7. 
+\b Calculate latencies
+\b0  to decide the boundaries of the epochs
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ \'97>
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0  
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+calculate_latencies.m\
+\
+
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 8. 
+\b Epoch
+\b0  the dataset for each condition.
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ \'97>
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0  
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+epoching.m
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 \
+We usually want to cut different epochs:\
+- First ONset\
+- Second ONset\
+- Second OFFset (no answers included)\
+- Second OFFset (answers included, no next trial rotation included)\
+- Answer\
+Run the correspondent part of the script.\
+\
+Remove bad trials by eye. don\'92t forget to remove the corresponding trials from the Behavioral data. 
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ \'97>
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0  
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+remove_Behavioral.m
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0  \
+\
+9. C\
+\
+10. C  \
+\
+
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+\
+
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 Additional scripts: \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\tx18153\ri-9137\pardirnatural
+
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+calculate_diff_latency_platform_belt.m\cf2 \expnd0\expndtw0\kerning0
+ \'97> 
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 it calculates the latency\'92s difference of the belt and platform triggers. The difference should be consistent over all trials. Just to make sure it doesn\'92t matter which trial we choose in the bimodal condition. 
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+ \
+\
+\cf2 \expnd0\expndtw0\kerning0
+distribution_length_trials.m \'97> 
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 If desired, it\'92s possible to cut epochs for each trial (it might need to be update as it was written for very initial data).
+\f1\fs22 \cf2 \expnd0\expndtw0\kerning0
+\
+}
